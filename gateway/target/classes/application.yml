@@ -1,0 +1,74 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: user-management-and-authentication
+          uri: http://localhost:8082
+          predicates:
+            - Path=/users/**, 
+        - id: profile-management
+          uri: http://localhost:8083
+          predicates:
+            - Path=/profiles/**, 
+        - id: post-and-news-feed-management
+          uri: http://localhost:8085
+          predicates:
+            - Path=/posts/**, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: user-management-and-authentication
+          uri: http://userManagementAndAuthentication:8080
+          predicates:
+            - Path=/users/**, 
+        - id: profile-management
+          uri: http://profileManagement:8080
+          predicates:
+            - Path=/profiles/**, 
+        - id: post-and-news-feed-management
+          uri: http://postAndNewsFeedManagement:8080
+          predicates:
+            - Path=/posts/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
